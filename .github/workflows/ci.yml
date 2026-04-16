@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: xifty-swift-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/XIFtySwift
+    steps:
+      - name: Check out binding repo
+        uses: actions/checkout@v4
+        with:
+          path: XIFtySwift
+
+      - name: Check out core repo
+        uses: actions/checkout@v4
+        with:
+          repository: XIFtySense/XIFty
+          path: XIFty
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            XIFty -> target
+
+      - name: Build core FFI library
+        run: cargo build -p xifty-ffi --manifest-path ../XIFty/Cargo.toml
+
+      - name: Run Swift tests
+        run: swift test
