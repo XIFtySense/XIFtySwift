@@ -29,6 +29,12 @@ With a custom core checkout path:
 XIFTY_CORE_DIR=/path/to/XIFty swift test
 ```
 
+To consume the package from SwiftPM once you are pinning tagged releases:
+
+```swift
+.package(url: "https://github.com/XIFtySense/XIFtySwift.git", from: "0.1.0")
+```
+
 ## Architecture
 
 - package manager: Swift Package Manager
@@ -42,6 +48,12 @@ XIFTY_CORE_DIR=/path/to/XIFty swift test
 - built on the stable `xifty-ffi` ABI
 - CI validates the wrapper against the public XIFty core repo on every push
 - prepared for future Swift package distribution hardening
+
+## Release Model
+
+- SwiftPM distribution is tag-driven
+- consumers should depend on semver tags, not branch heads
+- the stable dependency seam remains `xifty-ffi`, with `CXIFty` as the C bridge
 
 ## License
 
