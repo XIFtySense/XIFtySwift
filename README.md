@@ -1,59 +1,69 @@
-# XIFtySwift
+# XIFty for Swift
 
-Swift package for [XIFty](https://github.com/XIFtySense/XIFty).
+`XIFtySwift` is the official Swift binding repo for XIFty.
 
-`XIFtySwift` is a SwiftPM wrapper over the stable `xifty-ffi` C ABI. It is
-ready for source-based use today and is intended to become the canonical Swift
-package for XIFty consumers.
+It provides a Foundation-friendly Swift wrapper over the stable `xifty-ffi` ABI
+so Swift applications can probe files and extract XIFty metadata views without
+dropping to the raw C surface.
 
-## What You Get
+## What It Does
+
+XIFty exposes four complementary metadata views:
+
+- `raw`
+- `interpreted`
+- `normalized`
+- `report`
+
+This Swift package keeps those views intact and adds a small Swift API.
+
+## Quick Example
+
+```swift
+let output = try XIFty.extract(path: "photo.jpg", view: .normalized)
+let normalized = output["normalized"] as! [String: Any]
+```
+
+## API
 
 - `XIFty.version()`
 - `XIFty.probe(path:)`
 - `XIFty.extract(path:view:)`
-- a Foundation-based Swift wrapper over the core JSON contract
 
-## Quickstart
+## Why Use It
 
-Clone the public core repo as a sibling checkout, then run the package against
-it:
+Use this binding when you want:
+
+- native Swift access to XIFty
+- normalized metadata fields for application logic
+- raw and interpreted metadata for provenance-sensitive workflows
+- a narrow Swift wrapper over the stable ABI instead of shelling out to a CLI
+
+## Local Setup
+
+This repo no longer assumes a sibling `../XIFty` checkout.
+
+Prepare the core dependency into a repo-local cache:
 
 ```bash
-git clone git@github.com:XIFtySense/XIFty.git ../XIFty
+bash scripts/prepare-core.sh
+```
+
+Then run the package:
+
+```bash
 swift test
+swift run XIFtySwiftExample
+swift run XIFtySwiftGalleryExample
 ```
 
-With a custom core checkout path:
-
-```bash
-XIFTY_CORE_DIR=/path/to/XIFty swift test
-```
-
-To consume the package from SwiftPM once you are pinning tagged releases:
-
-```swift
-.package(url: "https://github.com/XIFtySense/XIFtySwift.git", from: "0.1.0")
-```
-
-## Architecture
-
-- package manager: Swift Package Manager
-- C interop target: `CXIFty`
-- core seam: `xifty-ffi`
-- exchange format: JSON strings decoded with `Foundation`
+You can still override the core location explicitly with `XIFTY_CORE_DIR`.
 
 ## Status
 
 - source-first and usable today
 - built on the stable `xifty-ffi` ABI
-- CI validates the wrapper against the public XIFty core repo on every push
-- prepared for future Swift package distribution hardening
-
-## Release Model
-
-- SwiftPM distribution is tag-driven
-- consumers should depend on semver tags, not branch heads
-- the stable dependency seam remains `xifty-ffi`, with `CXIFty` as the C bridge
+- CI validates the wrapper against the public XIFty core repo
 
 ## License
 

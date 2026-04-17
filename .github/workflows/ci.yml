@@ -30,12 +30,6 @@ jobs:
         with:
           path: XIFtySwift
 
-      - name: Check out core repo
-        uses: actions/checkout@v5
-        with:
-          repository: XIFtySense/XIFty
-          path: XIFty
-
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
 
@@ -43,10 +37,15 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: |
-            XIFty -> target
+            XIFtySwift/.xifty-core -> target
 
-      - name: Build core FFI library
-        run: cargo build -p xifty-ffi --manifest-path ../XIFty/Cargo.toml
+      - name: Prepare core
+        run: bash scripts/prepare-core.sh
 
       - name: Run Swift tests
         run: swift test
+
+      - name: Run examples
+        run: |
+          swift run XIFtySwiftExample
+          swift run XIFtySwiftGalleryExample
