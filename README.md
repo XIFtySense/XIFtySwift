@@ -59,9 +59,14 @@ swift run XIFtySwiftGalleryExample
 
 You can still override the core location explicitly with `XIFTY_CORE_DIR`.
 
+This binding is intentionally not yet on the canonical runtime-artifact path
+used by the newer Python and Rust packaging work. Swift remains a source-first
+binding until that distribution story is hardened more deliberately.
+
 ## Status
 
 - source-first and usable today
+- not yet on the canonical runtime-artifact packaging path
 - built on the stable `xifty-ffi` ABI
 - CI validates the wrapper against the public XIFty core repo
 
