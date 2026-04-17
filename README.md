@@ -1,18 +1,25 @@
 # XIFtySwift
 
-Swift package for XIFty.
+Swift package for [XIFty](https://github.com/XIFtySense/XIFty).
 
-This package currently builds against the XIFty core repository through the
-stable `xifty-ffi` C ABI. Local development expects a sibling checkout of the
-core repo at:
+`XIFtySwift` is a SwiftPM wrapper over the stable `xifty-ffi` C ABI. It is
+ready for source-based use today and is intended to become the canonical Swift
+package for XIFty consumers.
 
-- `../XIFty`
+## What You Get
 
-You can override that location with `XIFTY_CORE_DIR`.
+- `XIFty.version()`
+- `XIFty.probe(path:)`
+- `XIFty.extract(path:view:)`
+- a Foundation-based Swift wrapper over the core JSON contract
 
-## Local Development
+## Quickstart
+
+Clone the public core repo as a sibling checkout, then run the package against
+it:
 
 ```bash
+git clone git@github.com:XIFtySense/XIFty.git ../XIFty
 swift test
 ```
 
@@ -31,7 +38,11 @@ XIFTY_CORE_DIR=/path/to/XIFty swift test
 
 ## Status
 
-This repo is public package infrastructure, but the core XIFty engine remains
-private today. Until the core distribution story is finalized, the package links
-against a local XIFty checkout instead of a published binary artifact.
+- source-first and usable today
+- built on the stable `xifty-ffi` ABI
+- CI validates the wrapper against the public XIFty core repo on every push
+- prepared for future Swift package distribution hardening
 
+## License
+
+MIT

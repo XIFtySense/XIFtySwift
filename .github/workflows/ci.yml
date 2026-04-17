@@ -10,24 +10,28 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: xifty-swift-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   test:
-    runs-on: macos-latest
+    runs-on: macos-14
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: ${{ github.workspace }}/XIFtySwift
     steps:
       - name: Check out binding repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: XIFtySwift
 
       - name: Check out core repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: XIFtySense/XIFty
           path: XIFty
